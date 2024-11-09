@@ -1,0 +1,28 @@
+from multiprocessing import Pool
+import time
+
+def read_info(name):
+    all_data = []
+    with open(name, 'r') as file:
+        line = file.readline().strip()
+        while line:
+            all_data.append(line)
+            line = file.readline().strip()
+        return all_data
+
+files = ['file 1.txt', 'file 2.txt', 'file 3.txt', 'file 4.txt']
+
+#Линейный подход
+start_time = time.time()
+for file in files:
+    read_info(file)
+end_time = time.time()
+print(f"{round(end_time - start_time, 6)} (линейный)")
+
+#Многопроцессный подход
+if __name__ == '__main__':
+    start_time = time.time()
+    with Pool(processes=len(files)) as pool:
+        pool.map(read_info, files)
+    end_time = time.time()
+    print(f"{round(end_time - start_time, 6)} (многопроцессорный)")
